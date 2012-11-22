@@ -1,13 +1,13 @@
 module Geometry.Cube
-( Volume
-, Area
+( volume
+, area
 ) where
 
 import qualified Geometry.Cuboid as Cuboid
 
-Volume :: Float -> Float
-Volume side = Cuboid.volume side side side
+volume :: Float -> Float
+volume side = Cuboid.volume side side side
 
-Area :: Float -> Float
-Area side = Cuboid.area side side side
+area :: Float -> Float
+area side = Cuboid.area side side side
 
