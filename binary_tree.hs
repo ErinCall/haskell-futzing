@@ -21,19 +21,12 @@ inTree x (Node val left right)
 data Assoc a b = Assoc a b
     deriving (Show)
 
-instance Ord (Assoc a b) where
+instance (Ord a) => Ord (Assoc a b) where
     (>) (Assoc x _) (Assoc y _) = x > y
     (<) (Assoc x _) (Assoc y _) = x < y
 
-instance Eq (Assoc a b) where
+instance (Eq a) => Eq (Assoc a b) where
     (==) (Assoc x _) (Assoc y _) = x == y
-
-mapInsert :: (Ord a) => (Assoc a b) -> (Tree (Assoc a b)) -> (Tree (Assoc a b))
-mapInsert x EmptyTree = Node x EmptyTree EmptyTree
-mapInsert (Assoc a b) (Node (Assoc x y) left right)
-    | a == x = Node (Assoc a b) left                         right
-    | a <  x = Node (Assoc x y) (mapInsert (Assoc a b) left) right
-    | a >  x = Node (Assoc x y) left (mapInsert (Assoc a b)  right)
 
 find :: (Ord a) => a -> Tree (Assoc a b) -> Maybe b
 find _ EmptyTree = Nothing
