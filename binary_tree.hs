@@ -18,6 +18,12 @@ inTree x (Node val left right)
     | x <  val = inTree x left
     | x >  val = inTree x right
 
+instance Functor Tree where
+    fmap f EmptyTree             = EmptyTree
+    fmap f (Node val left right) = Node (f val) (fmap f left) (fmap f right)
+
+----------------------------------------------------------
+
 data Assoc a b = Assoc a b
     deriving (Show)
 
