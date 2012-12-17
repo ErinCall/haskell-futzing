@@ -5,10 +5,8 @@ import System.Directory
 import Data.List
 
 main = do
-    args <- getArgs
-    let command = head args
-        subArgs = tail args
-    determineCommand command subArgs
+    (command:args) <- getArgs
+    determineCommand command args
 
 determineCommand :: String -> [String] -> IO ()
 determineCommand commandName
@@ -19,24 +17,20 @@ determineCommand commandName = \_ -> do
     putStrLn $ "I don't know how to " ++ commandName
 
 addTodo :: [String] -> IO ()
-addTodo args = do
-    let filename = head args
-        task     = args !! 1
+addTodo [filename, task] = do
     appendFile filename $ task ++ "\n"
 
 viewTodos :: [String] -> IO ()
-viewTodos args = do
-    contents <- readFile $ head args
+viewTodos [filename] = do
+    contents <- readFile filename
     let numberedTasks = zipWith (\n line -> show n ++ " - " ++ line) [0..] $ lines contents
     putStr $ unlines numberedTasks
 
 removeTodo :: [String] -> IO ()
-removeTodo args = do
-    let filename  = head args
-        taskIndex = read $ args !! 1
+removeTodo [filename, taskIndex] = do
     contents <- readFile filename
     let todoTasks = lines contents
-        stillTodo = unlines $ delete (todoTasks !! taskIndex) todoTasks
+        stillTodo = unlines $ delete (todoTasks !! read taskIndex) todoTasks
     bracketOnError (openTempFile "." "temp")
         (\(tempName, tempHandle) -> do
             hClose tempHandle
