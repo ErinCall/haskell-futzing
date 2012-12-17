@@ -1,3 +1,4 @@
+import Control.Exception
 import System.IO
 import System.Directory
 import Data.List
@@ -11,9 +12,13 @@ main = do
     numberString <- getLine
     let index = read numberString
         stillTodo = unlines $ delete (todoTasks !! index) todoTasks
-    (tempName, tempHandle) <- openTempFile "." "temp"
-    hPutStr tempHandle stillTodo
-    hClose tempHandle
-    removeFile "todo.txt"
-    renameFile tempName "todo.txt"
+    bracketOnError (openTempFile "." "temp")
+        (\(tempName, tempHandle) -> do
+            hClose tempHandle
+            removeFile tempName)
+        (\(tempName, tempHandle) -> do
+            hPutStr tempHandle stillTodo
+            hClose tempHandle
+            removeFile "todo.txt"
+            renameFile tempName "todo.txt")
 
