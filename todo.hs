@@ -9,10 +9,9 @@ main = do
     determineCommand command args
 
 determineCommand :: String -> [String] -> IO ()
-determineCommand commandName
-    | commandName == "add"    = addTodo
-    | commandName == "view"   = viewTodos
-    | commandName == "remove" = removeTodo
+determineCommand "add" = addTodo
+determineCommand "view" = viewTodos
+determineCommand "remove" = removeTodo
 determineCommand commandName = \_ -> do
     putStrLn $ "I don't know how to " ++ commandName
 
