@@ -1,13 +1,4 @@
-class Monad m => MonadPlus m where
-    mzero :: m a
-    mplus :: m a -> m a -> m a
-
-instance MonadPlus [] where
-    mzero = []
-    mplus = (++)
-
-guard True = return ()
-guard False = mzero
+import Control.Monad
 
 type KnightPos = (Int, Int)
 
